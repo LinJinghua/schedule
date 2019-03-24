@@ -16,15 +16,31 @@ const (
     INIT_SIZE int = 10;
 )
 
-var pool ipPool
+var (
+    read_pool ipPool
+    write_pool ipPool
+)
 
 func init()  {
+    read_pool.init()
+    write_pool.init()
+}
+
+func getRPool() *ipPool {
+    return &read_pool
+}
+
+func getWPool() *ipPool {
+    return &write_pool
+}
+
+func (pool *ipPool) init()  {
     pool.ips = make([]string, 0, INIT_SIZE)
     pool.cur = 0
 }
 
 // GetIP : GetIP
-func GetIP() string {
+func (pool *ipPool) GetIP() string {
     if (len(pool.ips) == 0) {
         return ""
     }
@@ -36,7 +52,7 @@ func GetIP() string {
 }
 
 // GetIPFree : GetIPFree
-func GetIPFree() string {
+func (pool *ipPool) GetIPFree() string {
     if (len(pool.ips) == 0) {
         return ""
     }
@@ -47,7 +63,7 @@ func GetIPFree() string {
 
 
 // AddIP : AddIP
-func AddIP(ip string) {
+func (pool *ipPool) AddIP(ip string) {
     pool.lock.Lock()
     defer pool.lock.Unlock()
     for _, v := range pool.ips {
@@ -60,7 +76,7 @@ func AddIP(ip string) {
 }
 
 // DelIP : DelIP
-func DelIP(ip string) {
+func (pool *ipPool) DelIP(ip string) {
     pool.lock.Lock()
     defer pool.lock.Unlock()
     for i := 0; i < len(pool.ips); i++ {

@@ -11,7 +11,12 @@ func downHandler() http.HandlerFunc {
         if ip, err := getRequestIP(req); err != nil {
             fmt.Fprintln(w, err.Error())
         } else {
-            DelIP(ip)
+            req.ParseForm()
+            if v := req.Form.Get("type"); v == "w" {
+                getWPool().DelIP(ip)
+            } else {
+                getRPool().DelIP(ip)
+            }
         }
     }
 }
