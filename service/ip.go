@@ -19,6 +19,8 @@ const (
 var (
     read_pool ipPool
     write_pool ipPool
+    read_result_pool ipPool
+    write_result_pool ipPool
 )
 
 func init()  {
@@ -32,6 +34,14 @@ func getRPool() *ipPool {
 
 func getWPool() *ipPool {
     return &write_pool
+}
+
+func getRResultPool() *ipPool {
+    return &read_result_pool
+}
+
+func getWResultPool() *ipPool {
+    return &write_result_pool
 }
 
 func (pool *ipPool) init()  {
